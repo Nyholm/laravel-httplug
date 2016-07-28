@@ -8,15 +8,27 @@
 
 namespace Http\LaravelHttplug;
 
+use Http\Adapter\Guzzle6\Client as Guzzle6Adapter;
+use Http\Client\Curl\Client as CurlClient;
 use Http\Client\HttpClient;
+use Illuminate\Support\Manager;
 
-class Httplug
+class Httplug extends Manager
 {
-    /** @var HttpClient */
-    private $client;
 
-    public function __construct()
+    public function createGuzzle6Driver()
     {
-        $this->client = '';
+        return new Guzzle6Adapter();
     }
+
+    public function createCurlDriver()
+    {
+        return new CurlClient();
+    }
+
+    public function getDefaultDriver()
+    {
+        // TODO: Return the first configured client or use auto discocery
+    }
+
 }

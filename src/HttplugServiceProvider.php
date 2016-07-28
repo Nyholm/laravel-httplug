@@ -8,10 +8,26 @@
 
 namespace Http\LaravelHttplug;
 
+use Http\Discovery\HttpClientDiscovery;
+use Http\Discovery\MessageFactoryDiscovery;
+use Http\Discovery\StreamFactoryDiscovery;
+use Http\Discovery\UriFactoryDiscovery;
 use Illuminate\Support\ServiceProvider;
 
 class HttplugServiceProvider extends ServiceProvider
 {
+    /**
+     * Factories by type.
+     *
+     * @var array
+     */
+    private $factoryClasses = [
+        'client' => HttpClientDiscovery::class,
+        'message_factory' => MessageFactoryDiscovery::class,
+        'uri_factory' => UriFactoryDiscovery::class,
+        'stream_factory' => StreamFactoryDiscovery::class,
+    ];
+
     /**
      * Bootstrap the application services.
      */
@@ -38,6 +54,12 @@ class HttplugServiceProvider extends ServiceProvider
             if (!empty($class)) {
                 $this->app->register(sprintf('httplug.%s.default', $service), function() use($class) {
                     return new $class();
+                });
+            } else {
+                // Find by auto discovery
+                $factoryClass = $this->factoryClasses[$class];
+                $this->app->register(sprintf('httplug.%s.default', $service), function() use($factoryClass) {
+                    return $factoryClass::find();
                 });
             }
         }
