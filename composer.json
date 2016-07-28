@@ -33,7 +33,7 @@
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
-            "Http\\Httplug\\": "src/"
+            "Http\\LaravelHttplug\\": "src/"
         }
     },
     "scripts": {
