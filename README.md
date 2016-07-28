@@ -18,6 +18,10 @@ $ composer require php-http/laravel-httplug
 
 ## Usage
 
+```php
+$request = Httplug::messageFactory()->createRequest('GET','http://tnyholm.se');
+$response = Httplug::client('acme')->sendRequest($request);
+```
 
 ## Testing
 
